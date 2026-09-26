@@ -34,6 +34,7 @@ public class Dragclick_trainer {
         ArrayList<Long> timestamps = new ArrayList<>();
         JLabel statsLabel = new JLabel("<html>Clics:0<br>CPS:0<br>average ms between clics:0</html>");
         f.add(statsLabel);
+        long time_window_cps_ms=500;
         Timer timer = new Timer(100, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -42,11 +43,12 @@ public class Dragclick_trainer {
                 if (timestamps.size()>=2){
                     int i=1;
                     ArrayList<Long> recent_timestamps = new ArrayList<>();
-                    while (i <= timestamps.size() && System.currentTimeMillis()-(timestamps.get(timestamps.size()-i))<=1000){
+                    while (i <= timestamps.size() && System.currentTimeMillis()-(timestamps.get(timestamps.size()-i))<=time_window_cps_ms){
                         recent_timestamps.add(timestamps.get(timestamps.size()-i));
                         i++;
+                        //recuperation des clics dans la derniere seconde
                     }
-                    long cps=1000*recent_timestamps.size()/1000;
+                    long cps=1000*recent_timestamps.size()/time_window_cps_ms;
                 statsLabel.setText("<html>Clics: " + timestamps.size() +"<br> CPS :"+cps+"<br>");}
             }
         });
